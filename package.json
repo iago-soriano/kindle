@@ -1,0 +1,17 @@
+{
+  "name": "kindle-tools",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "tsx --env-file=./.env.local src/index.ts"
+  },
+  "dependencies": {
+    "openai": "^4.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.19",
+    "tsx": "^4.7.0",
+    "typescript": "^5.9.3"
+  }
+}
