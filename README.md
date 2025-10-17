@@ -1,16 +1,17 @@
 # Kindle Translation Tools
 
-This directory contains tools for extracting Kindle highlights and translating them using OpenAI.
+This project extracts Kindle highlights and translates them using OpenAI.
 
 ## Files
 
 - `extract-from-kindle.ts` - Extracts highlights from Kindle's "My Clippings.txt" file
 - `translate.ts` - Translates entries from a text file using OpenAI API
-- `index.ts` - Main entry point that runs the translation and saves to CSV
+- `index.ts` - Main entry point that orchestrates the workflow
+- `utils.ts` - Helper functions for parsing file metadata
 
 ## Setup
 
-1. Install dependencies (if not already done):
+1. Install dependencies:
    ```bash
    pnpm install
    ```
@@ -20,51 +21,125 @@ This directory contains tools for extracting Kindle highlights and translating t
    export OPENAI_API_KEY="your-api-key-here"
    ```
 
-## Usage
+## Workflow
 
-### Translating a Text File
+The process consists of three steps:
 
-1. Open `translate.ts` and configure the following variables at the top:
+### Step 1: Extract from Kindle
+
+1. Connect your Kindle device to your computer
+
+2. Open `src/extract-from-kindle.ts` and configure:
    ```typescript
-   const INPUT_FILE = "l_homme_qui_savait_la_langue_des_serpents.txt"; // Your input file
-   const SOURCE_LANGUAGE = "French"; // Language to translate from
-   const TARGET_LANGUAGE = "English"; // Language to translate to
+   const BOOK_NAME = "L'homme qui savait la langue des serpents"; // Your book title
+   const CLIPPINGS_PATH = "/Volumes/Kindle/documents/My Clippings.txt"; // Path to Kindle
    ```
 
-2. Run the script:
+3. In `src/index.ts`, uncomment the extraction line:
+   ```typescript
+   extractFromKindle();
+   ```
+
+4. Run the script:
    ```bash
    pnpm start
    ```
 
-3. The script will:
-   - Read all entries from your text file (skipping the first line which is metadata)
-   - Translate each entry using OpenAI's GPT-4o-mini
-   - Save the results to a CSV file with the same name as your input file
+5. The script will:
+   - Read highlights from your Kindle's "My Clippings.txt" file
+   - Filter highlights for the specified book
+   - Save new highlights to `outputs/<book_name>.txt`
+   - Track progress using metadata in the first line
 
-### Example
-
-If your input file is `l_homme_qui_savait_la_langue_des_serpents.txt`, the output will be `l_homme_qui_savait_la_langue_des_serpents.csv` with two columns:
-- `Original` - The original text
-- `Translation` - The translated text
-
-## Text File Format
-
-The input text file should have:
-- First line: Metadata (will be skipped) - e.g., `# Last processed: Index: 24`
-- Following lines: One entry per line to translate
-
-Example:
+**Output Format:**
 ```
-# Last processed: Index: 24
+# Last processed: Index: 24 | Translate from: 10
 bûcher
 lièvres
 belettes
 ```
 
+The metadata tracks:
+- `Index`: Last highlight index extracted from Kindle
+- `Translate from`: Index to start translation from (for the next step)
+
+### Step 2: Review and Edit Sentences
+
+Manually review the generated `.txt` file in the `outputs/` directory:
+
+1. Open `outputs/<book_name>.txt`
+2. Review each line (highlight) for quality
+3. Edit, remove, or fix any entries as needed
+4. Keep the first line (metadata) intact
+
+This ensures you only translate clean, correct entries.
+
+### Step 3: Translate
+
+1. Comment out the extraction line in `src/index.ts`:
+   ```typescript
+   // extractFromKindle();
+   ```
+
+2. Open `src/translate.ts` and configure:
+   ```typescript
+   const INPUT_FILE = "outputs/l_homme_qui_savait_la_langue_des_serpents.txt";
+   const SOURCE_LANGUAGE = "Francês"; // Language to translate from
+   const TARGET_LANGUAGE = "Português Brasileiro"; // Language to translate to
+   ```
+
+3. Run the script:
+   ```bash
+   pnpm start
+   ```
+
+4. The script will:
+   - Read entries from the `.txt` file
+   - Use the metadata to determine which entries need translation
+   - Translate only new entries (from the "Translate from" index)
+   - Append translations to `outputs/<book_name>.csv`
+
+**Output Format (CSV):**
+```
+bûcher,fogueira
+lièvres,lebres
+belettes,doninhas
+```
+
+## How It Works
+
+### Incremental Processing
+
+The tool tracks progress to handle incremental updates:
+
+1. **After extraction**: The metadata stores the last processed highlight index
+2. **For translation**: The "Translate from" index marks where translation should start
+3. **On subsequent runs**: Only new highlights are extracted and translated
+
+### Translation Details
+
+- Uses OpenAI's GPT-4o-mini for cost-effective translations
+- Processes in batches of 10 to avoid rate limits
+- 100ms delay between requests
+- Appends to existing CSV (never overwrites)
+
+## Example Workflow
+
+```bash
+# 1. Extract highlights from Kindle
+# (Uncomment extractFromKindle() in index.ts)
+pnpm start
+
+# 2. Review and edit outputs/<book_name>.txt manually
+
+# 3. Translate entries
+# (Comment out extractFromKindle() in index.ts)
+pnpm start
+```
+
 ## Notes
 
-- The script processes translations in batches of 10 to avoid rate limits
-- There's a 100ms delay between each translation request
-- The script uses GPT-4o-mini for cost-effective translations
-- CSV fields are properly escaped for commas and quotes
+- The extraction script sanitizes highlights by removing punctuation (commas, periods, colons, etc.)
+- CSV output has no header row - just two columns: original and translation
+- All files are saved in the `outputs/` directory
 

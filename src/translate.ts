@@ -123,7 +123,7 @@ export async function translateEntries(): Promise<void> {
         });
 
         const translation =
-          response.choices[0]?.message?.content?.trim() ||
+          response.choices[0]?.message?.content?.replace(/\./g, "").trim() ||
           "[Translation failed]";
 
         newTranslations.push({
