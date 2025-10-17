@@ -60,8 +60,8 @@ belettes
 ```
 
 The metadata tracks:
-- `Index`: Last highlight index extracted from Kindle
-- `Translate from`: Index to start translation from (for the next step)
+- `Index`: Last highlight index extracted from Kindle. DO NOT CHANGE THIS, even if you've added and removed lines
+- `Translate from`: Index to start translation from (for the next step). The line to translate from. YOU CAN CHANGE THIS
 
 ### Step 2: Review and Edit Sentences
 
@@ -70,7 +70,6 @@ Manually review the generated `.txt` file in the `outputs/` directory:
 1. Open `outputs/<book_name>.txt`
 2. Review each line (highlight) for quality
 3. Edit, remove, or fix any entries as needed
-4. Keep the first line (metadata) intact
 
 This ensures you only translate clean, correct entries.
 

@@ -42,6 +42,9 @@ function parseClippings(content: string, targetBook: string): Highlight[] {
       ?.replace(/\:/g, " ")
       ?.replace(/»/g, " ")
       ?.replace(/\!/g, " ")
+      ?.replace(/\?/g, " ")
+      ?.replace(/\,/g, " -")
+      ?.toLocaleLowerCase()
       ?.trim();
 
     // Use the highlight index (only for this book) as location

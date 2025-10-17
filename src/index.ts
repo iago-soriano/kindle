@@ -5,10 +5,10 @@ import { translateEntries, INPUT_FILE } from "./translate.js";
 
 async function main() {
   // Uncomment the line below if you want to extract from Kindle first
-  extractFromKindle();
+  // extractFromKindle();
 
   // Run the translation
-  // await translateEntries();
+  await translateEntries();
 }
 
 // Run the script
