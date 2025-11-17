@@ -55,7 +55,7 @@ export async function translateEntries(): Promise<void> {
 
   // Read the input file
   const content = fs.readFileSync(inputPath, "utf-8");
-  const lines = content.split("\n");
+  const lines = content.split("\n").map((line) => line.trim());
 
   // Determine which entries need translation
   // translateFromIndex is the last index that was processed in the previous run
@@ -179,21 +179,16 @@ export async function translateEntries(): Promise<void> {
 
   // Update the .txt file header with the new translateFromIndex
   // plus one for the header, plus one to make it a line number instead of an index
-  const newTranslateFromIndex = allTranslations.length + 2;
+  const newTranslateFromIndex =
+    newTranslations.length + metadata.translateFromIndex;
 
   // Read the current file content
   const currentContent = fs.readFileSync(inputPath, "utf-8");
   const currentLines = currentContent.split("\n");
 
   // Update the header line with new translateFromIndex
-  if (currentLines[0].startsWith("# Last processed:")) {
-    // Keep the lastProcessedIndex the same, only update translateFromIndex
-    const indexMatch = currentLines[0].match(/Index: (\d+)/);
-    const lastProcessedIndex = indexMatch
-      ? indexMatch[1]
-      : metadata.lastProcessedIndex;
-
-    currentLines[0] = `# Last processed: Index: ${lastProcessedIndex} | Translate from: ${newTranslateFromIndex}`;
+  if (currentLines[0].startsWith("# Translate from: ")) {
+    currentLines[0] = `# Translate from: ${newTranslateFromIndex}`;
 
     // Write the updated content back
     fs.writeFileSync(inputPath, currentLines.join("\n"), "utf-8");

@@ -22,15 +22,10 @@ export function getFileMetadata(filePath: string): FileMetadata {
   };
 
   // Check if first line is a header with metadata
-  if (lines.length > 0 && lines[0].startsWith("# Last processed:")) {
-    const indexMatch = lines[0].match(/Index: (\d+)/);
-    if (indexMatch) {
-      metadata.lastProcessedIndex = parseInt(indexMatch[1], 10);
-    }
-
+  if (lines.length > 0 && lines[0].startsWith("# Translate from: ")) {
     const translateFromMatch = lines[0].match(/Translate from: (\d+)/);
     if (translateFromMatch) {
-      metadata.translateFromIndex = parseInt(translateFromMatch[1], 10);
+      metadata.translateFromIndex = parseInt(translateFromMatch[1], 10) + 1;
     }
   }
 
