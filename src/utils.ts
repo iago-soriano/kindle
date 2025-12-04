@@ -1,14 +1,12 @@
 import * as fs from "fs";
 
 export interface FileMetadata {
-  lastProcessedIndex: number;
   translateFromIndex: number;
 }
 
 export function getFileMetadata(filePath: string): FileMetadata {
   if (!fs.existsSync(filePath)) {
     return {
-      lastProcessedIndex: -1,
       translateFromIndex: -1,
     };
   }
@@ -17,7 +15,6 @@ export function getFileMetadata(filePath: string): FileMetadata {
   const lines = content.split("\n");
 
   const metadata: FileMetadata = {
-    lastProcessedIndex: -1,
     translateFromIndex: -1,
   };
 

@@ -113,13 +113,13 @@ export function extractFromKindle() {
   const existingHighlights = getExistingHighlights(outputPath);
 
   console.log(`Previously saved: ${existingHighlights.length} highlights`);
-  if (metadata.lastProcessedIndex >= 0) {
-    console.log(`Last processed index: ${metadata.lastProcessedIndex}`);
+  if (metadata.translateFromIndex >= 0) {
+    console.log(`Last processed index: ${metadata.translateFromIndex}`);
   }
 
   // Filter to get only new highlights (after the last processed index)
   const newHighlights = allHighlights.filter(
-    (h) => parseInt(h.location, 10) > metadata.lastProcessedIndex
+    (h) => parseInt(h.location, 10) > metadata.translateFromIndex
   );
 
   if (newHighlights.length === 0) {
@@ -129,14 +129,6 @@ export function extractFromKindle() {
 
   console.log(`Adding ${newHighlights.length} new highlights.`);
 
-  // Get the last highlight's index for the header
-  const lastHighlight = allHighlights[allHighlights.length - 1];
-
-  // Set translateFromIndex: use the previous lastProcessedIndex as the starting point for translation
-  const translateFromIndex = metadata.lastProcessedIndex;
-
-  const headerLine = `# Last processed: Index: ${lastHighlight.location} | Translate from: ${translateFromIndex}\n`;
-
   // Combine existing and new highlights
   const allHighlightTexts = [
     ...existingHighlights,
@@ -144,7 +136,7 @@ export function extractFromKindle() {
   ];
 
   // Write to file
-  const outputContent = headerLine + allHighlightTexts.join("\n") + "\n";
+  const outputContent = allHighlightTexts.join("\n") + "\n";
   fs.writeFileSync(outputPath, outputContent, "utf-8");
 
   console.log(`✓ Saved to: ${outputPath}`);

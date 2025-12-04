@@ -153,7 +153,7 @@ export async function translateEntries(): Promise<void> {
   }
 
   // Combine existing and new translations
-  const allTranslations = [...existingTranslations, ...newTranslations];
+  const allTranslations = [...(existingTranslations ?? []), ...newTranslations];
 
   // Create CSV content
   const csvLines = allTranslations.map(

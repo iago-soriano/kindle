@@ -1,4 +1,4 @@
-# Translate from: 146
+# Translate from: 185
 bûcher
 lièvres
 belettes
@@ -101,15 +101,15 @@ crocs
 elle bourdonne, les bourdonnements
 elle stridule, les stridulences
 elle grésille, les grésillements
-il accourait docile 
+il accourait docile
 maman contemplait la scène d’un air attendri
 le hérisson
 tombés dans l’oreille d’un sot
 on peut siffler à en crever
-tresses 
-dorées 
+tresses
+dorées
 églantines
-donner du lait aux hérissons 
+donner du lait aux hérissons
 écuelles
 trébucher dessus
 plus tard advienne que pourra
@@ -119,7 +119,7 @@ rideau de brouillard qui égarait les imbéciles
 affreux
 corvées
 s’abreuver de lait de louve
-beugler 
+beugler
 un bouc
 détraquer l’appétit
 devisant de choses et d’autres
@@ -127,7 +127,7 @@ haches
 pourrissantes
 fourrer son nez dans les affaires
 les gens ne supportent pas qu’il y ait des choses qui les dépassent
-ils pourraient la dénicher 
+ils pourraient la dénicher
 cette fameuse grotte
 les hommes vivent d’espoir aussi ténu soit-il
 tout le corps engourdi
@@ -144,3 +144,41 @@ longer
 la traverser de temps à autre
 foudre
 de son propre gré
+mue
+souiller sa belle peau
+heaume
+convoitise de ses congénères
+las de marcher
+il fallait se donner beaucoup de peine pour la faire fonctionner
+chamailleries
+larbin
+se pourléchant
+qu’il ne pouvait rien m’arriver de fâcheux
+découchais
+elle ne se faisait pas de mauvais sang
+c’étaient les anthropopithèques à cause des poux
+poux
+grillon
+coccinelles
+renardeaux
+pelisses
+savoir écarter les moustiques
+leurs piqûres et leurs morsures sont douloureuses
+pour l’instant faute de mieux
+j’avais beau m’exercer
+tu auras beau t’affiler les dents autant que tu voudras
+à part eux
+bosse molle
+ce n’était pas mon affaire – tant qu’il n’allait pas importuner ma sœur
+ledit
+pourléchaient
+recoin
+laisse
+se figurer
+un terrain plus dégagé
+d’écureuil
+embonpoint
+nid
+alors que je traînais dans la forêt
+bafouillai
+fesses
