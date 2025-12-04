@@ -6,6 +6,7 @@ This project extracts Kindle highlights and translates them using OpenAI.
 
 - `extract-from-kindle.ts` - Extracts highlights from Kindle's "My Clippings.txt" file
 - `translate.ts` - Translates entries from a text file using OpenAI API
+- `fire.ts` - FIRE (Financial Independence Retire Early) savings calculator
 - `index.ts` - Main entry point that orchestrates the workflow
 - `utils.ts` - Helper functions for parsing file metadata
 
@@ -120,7 +121,29 @@ The tool tracks progress to handle incremental updates:
 - Uses OpenAI's GPT-4o-mini for cost-effective translations
 - Processes in batches of 10 to avoid rate limits
 - 100ms delay between requests
-- Appends to existing CSV (never overwrites)
+   - Appends to existing CSV (never overwrites)
+
+## FIRE Calculator
+
+Calculate how much you need to save monthly to achieve financial independence:
+
+1. Edit the constants in `src/fire.ts`:
+   ```typescript
+   const CURRENT_NET_WORTH = 100000; // Your current net worth
+   const INTEREST_RATE = 0.07; // Expected annual return (7%)
+   const INFLATION_RATE = 0.03; // Expected inflation (3%)
+   const DESIRED_MONTHLY_INCOME = 5000; // Monthly retirement income
+   const WITHDRAWAL_RATE = 0.04; // Safe withdrawal rate (4% rule)
+   const BIRTH_YEAR = 1980; // Your birth year
+   const RETIREMENT_AGE = 65; // Desired retirement age
+   ```
+
+2. Run the calculator:
+   ```bash
+   pnpm run fire
+   ```
+
+The script calculates your monthly savings requirement using the 4% rule and accounts for inflation-adjusted returns.
 
 ## Example Workflow
 
