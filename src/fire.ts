@@ -20,10 +20,10 @@
 const CURRENT_NET_WORTH = 900_000; // Your current net worth in dollars
 const INTEREST_RATE = 0.12; // Expected annual return rate (7% = 0.07)
 const INFLATION_RATE = 0.057; // Expected annual inflation rate (3% = 0.03)
-const DESIRED_MONTHLY_INCOME = 20_000; // Monthly income wanted in retirement (today's dollars)
-const WITHDRAWAL_RATE = 0.057; // Safe withdrawal rate (4% rule = 0.04)
+const DESIRED_MONTHLY_INCOME = 25_000; // Monthly income wanted in retirement (today's dollars)
+const WITHDRAWAL_RATE = 0.05; // Safe withdrawal rate (4% rule = 0.04)
 const BIRTH_YEAR = 1994; // Your birth year
-const RETIREMENT_AGE = 45; // Age at which you want to retire
+const RETIREMENT_AGE = 46; // Age at which you want to retire
 // ======================================
 
 interface FIREInputs {

@@ -4,7 +4,7 @@ import OpenAI from "openai";
 import { getFileMetadata, type FileMetadata } from "./utils.js";
 
 // ========== CONFIGURATION ==========
-const INPUT_FILE = "outputs/l_homme_qui_savait_la_langue_des_serpents.txt"; // Change this to your target file
+const INPUT_FILE = "outputs/harry_potter_et_l_ordre_du_ph_nix.txt"; // Change this to your target file
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Set your API key in environment
 const SOURCE_LANGUAGE = "Francês"; // Language to translate from
 const TARGET_LANGUAGE = "Português Brasileiro"; // Language to translate to

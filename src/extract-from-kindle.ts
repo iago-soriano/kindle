@@ -3,7 +3,7 @@ import * as path from "path";
 import { getFileMetadata } from "./utils.js";
 
 // ========== CONFIGURATION ==========
-const BOOK_NAME = "L'homme qui savait la langue des serpents"; // Change this to your target book
+const BOOK_NAME = "Harry Potter Et L'Ordre Du Phénix"; // Change this to your target book
 const CLIPPINGS_PATH = "/Volumes/Kindle/documents/My Clippings.txt"; // Update this path
 const OUTPUT_DIR = path.join(process.cwd(), "outputs");
 // ===================================
