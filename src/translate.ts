@@ -60,7 +60,8 @@ export async function translateEntries(): Promise<void> {
   // Determine which entries need translation
   // translateFromIndex is the last index that was processed in the previous run
   // We need to translate entries after that index (-1 to go from line number to index)
-  const startIndex = metadata.translateFromIndex - 1;
+  const startIndex =
+    metadata.translateFromIndex - 1 < 0 ? 0 : metadata.translateFromIndex - 1;
   const entriesToTranslate = lines
     .slice(startIndex)
     .filter((line: string) => line.length > 0);

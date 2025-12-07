@@ -22,7 +22,7 @@ export function getFileMetadata(filePath: string): FileMetadata {
   if (lines.length > 0 && lines[0].startsWith("# Translate from: ")) {
     const translateFromMatch = lines[0].match(/Translate from: (\d+)/);
     if (translateFromMatch) {
-      metadata.translateFromIndex = parseInt(translateFromMatch[1], 10) + 1;
+      metadata.translateFromIndex = parseInt(translateFromMatch[1], 10);
     }
   }
 
