@@ -13,17 +13,22 @@
  * FORMULAS USED:
  * - Nest egg needed = (desired monthly income × 12) ÷ withdrawal rate
  * - Real return rate = (1 + interest rate) ÷ (1 + inflation rate) - 1
- * - Monthly savings = [nest egg - future value of current savings] × real rate ÷ [(1+real rate)^months - 1]
+ * - Monthly savings (first month, growing with inflation) solves the growing annuity FV:
+ *     FV = PMT0 × [((1+i)^n - (1+g)^n) / (i - g)]  where:
+ *       - PMT0 is the first monthly payment
+ *       - i is the monthly nominal return rate
+ *       - g is the monthly inflation rate (payment growth)
+ *       - n is the number of months
  */
 
 // === YOUR INPUTS - EDIT THESE VALUES ===
-const CURRENT_NET_WORTH = 900_000; // Your current net worth in dollars
+const CURRENT_NET_WORTH = 600_000; // Your current net worth in dollars
 const INTEREST_RATE = 0.12; // Expected annual return rate (7% = 0.07)
 const INFLATION_RATE = 0.057; // Expected annual inflation rate (3% = 0.03)
-const DESIRED_MONTHLY_INCOME = 25_000; // Monthly income wanted in retirement (today's dollars)
+const DESIRED_MONTHLY_INCOME = 20_000; // Monthly income wanted in retirement (today's dollars)
 const WITHDRAWAL_RATE = 0.05; // Safe withdrawal rate (4% rule = 0.04)
 const BIRTH_YEAR = 1994; // Your birth year
-const RETIREMENT_AGE = 46; // Age at which you want to retire
+const RETIREMENT_AGE = 50; // Age at which you want to retire
 // ======================================
 
 interface FIREInputs {
@@ -40,8 +45,8 @@ interface FIREResults {
   yearsUntilRetirement: number;
   nestEggNeeded: number; // Total nest egg needed in today's dollars
   realReturnRate: number; // Annual real return rate
-  monthlySavingsNeeded: number;
-  totalSavingsNeeded: number; // Additional savings needed beyond current net worth
+  monthlySavingsNeeded: number; // First month's savings (will grow with inflation)
+  totalSavingsNeeded: number; // Additional savings needed beyond current net worth (nominal at retirement)
 }
 
 function calculateFIRE(inputs: FIREInputs): FIREResults {
@@ -73,19 +78,24 @@ function calculateFIRE(inputs: FIREInputs): FIREResults {
   // Calculate real return rate (nominal return minus inflation)
   const realReturnRate = (1 + interestRate) / (1 + inflationRate) - 1;
 
-  // Calculate monthly real return rate
-  const monthlyRealReturnRate = realReturnRate / 12;
+  // Monthly nominal and inflation rates
+  const monthlyNominalReturnRate = interestRate / 12;
+  const monthlyInflationRate = inflationRate / 12;
 
   // Calculate number of months until retirement
   const monthsUntilRetirement = yearsUntilRetirement * 12;
 
-  // Calculate future value of current net worth in real terms
+  // Convert nest egg to nominal dollars needed at retirement
+  const nestEggNeededNominal =
+    nestEggNeeded * Math.pow(1 + inflationRate, yearsUntilRetirement);
+
+  // Calculate future value of current net worth in nominal terms
   const futureValueCurrentNetWorth =
     currentNetWorth *
-    Math.pow(1 + monthlyRealReturnRate, monthsUntilRetirement);
+    Math.pow(1 + monthlyNominalReturnRate, monthsUntilRetirement);
 
-  // Calculate additional savings needed
-  const totalSavingsNeeded = nestEggNeeded - futureValueCurrentNetWorth;
+  // Calculate additional savings needed (nominal)
+  const totalSavingsNeeded = nestEggNeededNominal - futureValueCurrentNetWorth;
 
   if (totalSavingsNeeded <= 0) {
     return {
@@ -97,12 +107,25 @@ function calculateFIRE(inputs: FIREInputs): FIREResults {
     };
   }
 
-  // Calculate monthly savings needed using future value of annuity formula
-  // FV = PMT × [(1+r)^n - 1]/r
-  // PMT = FV × r / [(1+r)^n - 1]
+  // Calculate monthly savings needed using growing annuity FV
+  // FV = PMT0 × [((1+i)^n - (1+g)^n)/(i - g)]
+  const rateDifference = monthlyNominalReturnRate - monthlyInflationRate;
+  const growthTermNominal = Math.pow(
+    1 + monthlyNominalReturnRate,
+    monthsUntilRetirement
+  );
+  const growthTermInflation = Math.pow(
+    1 + monthlyInflationRate,
+    monthsUntilRetirement
+  );
+
   const monthlySavingsNeeded =
-    (totalSavingsNeeded * monthlyRealReturnRate) /
-    (Math.pow(1 + monthlyRealReturnRate, monthsUntilRetirement) - 1);
+    Math.abs(rateDifference) < 1e-9
+      ? totalSavingsNeeded /
+        (monthsUntilRetirement *
+          Math.pow(1 + monthlyNominalReturnRate, monthsUntilRetirement - 1))
+      : (totalSavingsNeeded * rateDifference) /
+        (growthTermNominal - growthTermInflation);
 
   return {
     yearsUntilRetirement,
@@ -176,7 +199,7 @@ function displayResults(inputs: FIREInputs, results: FIREResults) {
     `   Real return rate: ${formatPercentage(results.realReturnRate)}`
   );
   console.log(
-    `   Additional savings needed: ${formatCurrency(
+    `   Additional savings needed (nominal at retirement): ${formatCurrency(
       results.totalSavingsNeeded
     )}`
   );
@@ -187,9 +210,18 @@ function displayResults(inputs: FIREInputs, results: FIREResults) {
     );
   } else {
     console.log("\n💰 SAVINGS REQUIRED:");
-    console.log(`   Monthly: ${formatCurrency(results.monthlySavingsNeeded)}`);
     console.log(
-      `   Annual: ${formatCurrency(results.monthlySavingsNeeded * 12)}`
+      `   Monthly (first month, grows with inflation): ${formatCurrency(
+        results.monthlySavingsNeeded
+      )}`
+    );
+    console.log(
+      `   Expected monthly growth: ${formatPercentage(inputs.inflationRate)}`
+    );
+    console.log(
+      `   Annual (first year): ${formatCurrency(
+        results.monthlySavingsNeeded * 12
+      )}`
     );
   }
 }
